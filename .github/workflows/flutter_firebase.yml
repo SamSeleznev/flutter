@@ -33,14 +33,9 @@ jobs:
     - name: Build APK
       run: flutter build apk
 
-    - name: Upload Artifact
-      uses: actions/upload-artifact@v2
+    - name: Upload APK to Firebase App Distribution
+      uses: wzieba/Firebase-Distribution-Github-Action@v1
       with:
-        name: app-release.apk
-        path: build/app/outputs/flutter-apk/app-release.apk
-
-    - name: Install Firebase Tools
-      run: npm install -g firebase-tools
-
-    - name: Distribute to Firebase
-      run: npx firebase appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk --app flutter-15 --token ${{ secrets.FIREBASE_TOKEN }}
+        appId: ${{secrets.FIREBASE_APP_ID}}
+        token: ${{secrets.FIREBASE_TOKEN}}
+        file: build/app/outputs/flutter-apk/app-release.apk
