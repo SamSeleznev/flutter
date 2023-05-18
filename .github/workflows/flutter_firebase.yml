@@ -1,0 +1,45 @@
+name: Flutter CI and Firebase Distribution
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v1
+      with:
+        flutter-version: '2.2.3' # specify the Flutter version
+
+    - name: Get Flutter Packages
+      run: flutter pub get
+
+    - name: Build APK
+      run: flutter build apk
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-release.apk
+        path: build/app/outputs/flutter-apk/app-release.apk
+
+    - name: Setup Firebase CLI
+      uses: w9jds/firebase-action@v1.5.0
+      with:
+        args: firebase login --non-interactive
+
+    - name: Distribute to Firebase
+      uses: w9jds/firebase-action@v1.5.0
+      with:
+        args: appdistribution:distribute build/app/outputs/flutter-apk/app-release.apk --app flutter-15 --token ${{ secrets.FIREBASE_TOKEN }}
