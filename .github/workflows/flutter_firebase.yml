@@ -21,8 +21,8 @@ jobs:
     - name: Setup Node.js environment
       uses: actions/setup-node@v3
       with:
-        node-version: '18.x'
-        
+        node-version: '16.x'
+
     - name: Setup Flutter
       uses: subosito/flutter-action@v1
       with:
@@ -43,7 +43,7 @@ jobs:
     - name: Setup Firebase CLI
       uses: w9jds/firebase-action@v1.5.0
       with:
-        args: firebase login --non-interactive      
+        args: firebase login --non-interactive
       env:
         FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
